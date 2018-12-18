@@ -14,7 +14,7 @@ class EventTypeController extends Controller
      */
     public function index()
     {
-        //
+        return EventType::all();
     }
 
     /**

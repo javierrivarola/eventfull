@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Comment;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreComment;
 
 class CommentController extends Controller
 {
@@ -33,9 +34,11 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreComment $request)
     {
-        //
+      $validated = $request->validated();
+      $comment = Comment::create($validated);
+      return $comment;
     }
 
     /**
@@ -80,6 +83,6 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
-        //
+
     }
 }

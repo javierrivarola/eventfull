@@ -32,4 +32,8 @@ class User extends Authenticatable
     public function events(){
       return $this->belongsToMany('App\Event','users_events');
     }
+
+    public function talks(){
+      return $this->hasMany('App\Talk');
+    }
 }

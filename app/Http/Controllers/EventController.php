@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Event;
 use App\Http\Requests\StoreEvent;
 use App\Response;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\User;
 
 class EventController extends Controller
 {
@@ -86,5 +88,24 @@ class EventController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Lists the speakers for the specified event.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+
+    public function getAllSpeakers($id){
+        try {
+          $event = Event::findOrFail($id);
+          $speakers = User::whereHas('talks', function ($query) use ($event) {
+              $query->where('event_id',$event->id);
+          })->get();
+          return $speakers;
+        }catch(ModelNotFoundException $e) {
+
+        }
     }
 }

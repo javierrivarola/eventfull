@@ -18,6 +18,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::resource('event','EventController');
+Route::get('event/{id}/speakers','EventController@getAllSpeakers');
+
 Route::resource('question','QuestionController');
 Route::resource('comment','CommentController');
 Route::resource('talk','TalkController');

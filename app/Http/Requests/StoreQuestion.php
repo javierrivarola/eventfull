@@ -13,7 +13,7 @@ class StoreQuestion extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,7 +25,7 @@ class StoreQuestion extends FormRequest
     {
         return [
           'text' => 'required|unique:questions|max:255',
-          'talk_id' => 'sometimes|exists:talks,id',
+          'talk_id' => 'required|exists:talks,id',
           'enable_comments' => 'sometimes|boolean'
         ];
     }

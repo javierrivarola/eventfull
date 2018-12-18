@@ -13,7 +13,7 @@ class StoreComment extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,9 @@ class StoreComment extends FormRequest
     public function rules()
     {
         return [
-            //
+          'text' => 'required|max:255',
+          'user_id'=>'sometimes|exists:users,id',
+          'question_id'=>'required|exists:questions,id',
         ];
     }
 }

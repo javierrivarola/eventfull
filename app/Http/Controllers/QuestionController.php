@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Questions;
+use App\Question;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreQuestion;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use DB;
 
-class QuestionsController extends Controller
+class QuestionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +17,7 @@ class QuestionsController extends Controller
      */
     public function index()
     {
-        //
+        return Question::all();
     }
 
     /**
@@ -33,9 +36,11 @@ class QuestionsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreQuestion $request)
     {
-        //
+      $validated = $request->validated();
+      $question = Question::create($validated);
+      return $question;
     }
 
     /**
@@ -81,5 +86,38 @@ class QuestionsController extends Controller
     public function destroy(Questions $questions)
     {
         //
+    }
+
+    /**
+     *Adds a vote to the specified resource
+     * @param  integer  $id
+     */
+
+    public function voteUp($id){
+      try {
+        DB::transaction(function () {
+          $question = Question::findOrFail($id);
+          $question->upvotes = $question->upvotes + 1;
+          $question->save();
+        });
+      }catch(ModelNotFoundException $e) {
+
+      }
+    }
+
+    /**
+     *Removes a vote to the specified resource
+     * @param  integer  $id
+     */
+    public function voteDown($id){
+      try {
+        DB::transaction(function () {
+          $question = Question::findOrFail($id);
+          $question->downvotes = $question->downvotes + 1;
+          $question->save();
+        });
+      }catch(ModelNotFoundException $e) {
+
+      }
     }
 }

@@ -14,7 +14,7 @@ class PaymentGatewayController extends Controller
      */
     public function index()
     {
-        //
+        return PaymentGateway::all();
     }
 
     /**
