@@ -45,6 +45,6 @@ PUSHER_APP_CLUSTER=mt1
 MIX_PUSHER_APP_KEY="${PUSHER_APP_KEY}"
 MIX_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
 
-4-) Abrir una terminal, ir al Root del proyecto y correr "php artisan migrate" y luego "php artisan db:seed", el primero comando crea las tablas necesarias para los modelos y el segundo precarga algunas tablas con ciertos datos de inicializacion
+4-) Abrir una terminal, ir al Root del proyecto y correr "composer install", "php artisan migrate" y luego "php artisan db:seed", el primero instala las librerias necesarias, el segundo comando crea las tablas necesarias para los modelos y el segundo precarga algunas tablas con ciertos datos de inicializacion
 5-) Correr "php artisan serve", Esto correra un servidor web temporal localmente con el proyecto
 6-) Ir a la url del proyecto + /api-tester Ej: http://127.0.0.1:8000/api-tester , desde alli se podran testear las rutas
