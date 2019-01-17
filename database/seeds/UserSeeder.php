@@ -16,9 +16,9 @@ class UserSeeder extends Seeder
         $persona = User::create(["name"=>"Alberto Gonzalez", "password"=>Hash::make('password'), "email" => "alberto@mail.com"]);
         $persona->assignRole('persona');
 
-        $alumno = User::create(["name"=>"Beto Llanes", "password"=>Hash::make('password'), "email" => "beto@mail.com"]);
+        $alumno = User::create(["name"=>"Beto Llanes", "password"=>Hash::make('password'), "email" => "beto@mail.com", "university"=>"UCA","faculty"=>"CyT"]);
         $alumno->assignRole('alumno');
-        $alumno = User::create(["name"=>"Josue Ramirez", "password"=>Hash::make('password'), "email" => "josue@mail.com"]);
+        $alumno = User::create(["name"=>"Josue Ramirez", "password"=>Hash::make('password'), "email" => "josue@mail.com", "university"=>"UCA","faculty"=>"CyT"]);
         $alumno->assignRole('alumno');
 
         $investigador = User::create(["name"=>"Carlos Mernes", "password"=>Hash::make('password'), "email" => "carlos@mail.com"]);

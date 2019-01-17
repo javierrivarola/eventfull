@@ -18,7 +18,7 @@ class EventController extends Controller
   */
   public function index()
   {
-    return  ["success"=>true,"data"=>Event::with('talks','type','attendants')->get()];
+    return  ["success"=>true,"data"=>Event::with('talks.speaker.roles','type','attendants')->get()];
   }
 
   /**
