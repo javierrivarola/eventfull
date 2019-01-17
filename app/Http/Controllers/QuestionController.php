@@ -114,7 +114,7 @@ class QuestionController extends Controller
           $question = Question::findOrFail($id);
           $question->upvotes = $question->upvotes + 1;
           $question->save();
-          return ["success"=>true,"data"=>"Question voted up successfully."]
+          return ["success"=>true,"data"=>"Question voted up successfully."];
         });
     }
 
@@ -127,7 +127,7 @@ class QuestionController extends Controller
           $question = Question::findOrFail($id);
           $question->downvotes = $question->downvotes + 1;
           $question->save();
-          return ["success"=>true,"data"=>"Question voted down successfully."]
+          return ["success"=>true,"data"=>"Question voted down successfully."];
         });
     }
 }

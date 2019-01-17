@@ -15,7 +15,7 @@ class TalkController extends Controller
      */
     public function index()
     {
-        return Talk::with('speaker.role','event.type','questions')->get();
+        return ["success"=>true,"data"=> Talk::with('speaker.roles','event.type','questions')->get()];
     }
 
     /**
@@ -86,5 +86,13 @@ class TalkController extends Controller
         //
     }
 
-
+    public function mine() {
+      $user = auth()->user();
+      if ($user->hasRole('investigador')) {
+        $myTalks = Talk::where('user_id',$user->id)->get();
+        return ["success"=>true,"data"=>$myTalks];
+      }else{
+        return response()->json(["success"=>false,"data"=>"Feature only available for investigators."]);
+      }
+    }
 }

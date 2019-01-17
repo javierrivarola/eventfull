@@ -21,7 +21,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //Events
 Route::resource('event','EventController');
 Route::get('event/{id}/speakers','EventController@getAllSpeakers');
-
+Route::resource('question','QuestionController');
 Route::resource('talk','TalkController');
 Route::resource('comment','CommentController');
 //Talks
@@ -32,6 +32,7 @@ Route::group([
 
 ], function ($router) {
   Route::post('event/signup','EventController@signup');
+  Route::get('talk/mine','TalkController@mine');
   Route::resource('question','QuestionController',['only'=>['destroy']]);
 
 });

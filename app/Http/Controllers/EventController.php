@@ -136,4 +136,6 @@ class EventController extends Controller
       $event->attendants()->attach($user);
       return response()->json(["success"=>true,"data"=>$event]);
   }
+
+
 }
