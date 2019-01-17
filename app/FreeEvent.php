@@ -7,5 +7,5 @@ use App\Event;
 
 class FreeEvent extends Event
 {
-    //
+  protected $table = 'free_event';
 }

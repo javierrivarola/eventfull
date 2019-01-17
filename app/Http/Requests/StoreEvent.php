@@ -25,7 +25,8 @@ class StoreEvent extends FormRequest
     {
         return [
           'name' => 'required|unique:events|max:255',
-          'event_type_id' => 'sometimes|exists:event_types,id',
+          'event_type_id' => 'required|exists:event_types,id',
+          'price' => 'required_if:event_type_id,3|integer',
         ];
     }
 }

@@ -7,6 +7,7 @@ use App\Event;
 
 class PaidEvent extends Event
 {
+    protected $table = 'paid_event';
     private $price = 0;
 
     function getPrice(){
