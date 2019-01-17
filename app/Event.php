@@ -25,11 +25,4 @@ class Event extends Model
       return $this->belongsTo('App\EventType','event_type_id','id');
     }
 
-    public function addAttendant($user){
-
-    }
-
-    public function addTalk($talk){
-
-    }
 }

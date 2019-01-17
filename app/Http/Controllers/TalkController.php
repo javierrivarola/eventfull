@@ -15,7 +15,7 @@ class TalkController extends Controller
      */
     public function index()
     {
-        return Talk::with('speaker','event.type','questions')->get();
+        return Talk::with('speaker.role','event.type','questions')->get();
     }
 
     /**

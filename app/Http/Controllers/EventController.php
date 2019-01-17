@@ -121,8 +121,14 @@ class EventController extends Controller
       if ($event->type->name === Event::paidTypeName) {
         $payment_gateway_id = $request->input("payment_gateway_id");
         if (!is_null($payment_gateway_id)) {
-          $order = \App\Order::create(["user_id"=>$user->id,"event_id"=>$event_id,"payment_gateway_id"=>$payment_gateway_id]);
-          return response()->json(["success"=>true,"data"=>['event'=>$event,'order'=>$order]]);
+          $orderExists = \App\Order::where('user_id',$user->id)->where('event_id',$event_id)->first();
+          if (is_null($orderExists)) {
+            $order = \App\Order::create(["user_id"=>$user->id,"event_id"=>$event_id,"payment_gateway_id"=>$payment_gateway_id]);
+            $event->attendants()->attach($user);
+            return response()->json(["success"=>true,"data"=>['event'=>$event,'order'=>$order]]);
+          }else{
+            return response()->json(["success"=>false,"data"=>"User already has an active order on this event."]);
+          }
         }else{
           return response()->json(["success"=>false,"data"=>"Payment Gateway ID is required."]);
         }
