@@ -11,101 +11,123 @@ use App\User;
 
 class EventController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-        return Event::with('talks','type','attendants')->get();
-    }
+  /**
+  * Display a listing of the resource.
+  *
+  * @return \Illuminate\Http\Response
+  */
+  public function index()
+  {
+    return  ["success"=>true,"data"=>Event::with('talks','type','attendants')->get()];
+  }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+  /**
+  * Show the form for creating a new resource.
+  *
+  * @return \Illuminate\Http\Response
+  */
+  public function create()
+  {
+    //
+  }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreEvent $request)
-    {
-        $validated = $request->validated();
-        $event = Event::create($validated);
-        return $event;
-    }
+  /**
+  * Store a newly created resource in storage.
+  *
+  * @param  \Illuminate\Http\Request  $request
+  * @return \Illuminate\Http\Response
+  */
+  public function store(StoreEvent $request)
+  {
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+    $validated = $request->validated();
+    $event = Event::create($validated);
+    return ["success"=>true,"data"=>$event];
+  }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+  /**
+  * Display the specified resource.
+  *
+  * @param  int  $id
+  * @return \Illuminate\Http\Response
+  */
+  public function show($id)
+  {
+    //
+  }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+  /**
+  * Show the form for editing the specified resource.
+  *
+  * @param  int  $id
+  * @return \Illuminate\Http\Response
+  */
+  public function edit($id)
+  {
+    //
+  }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+  /**
+  * Update the specified resource in storage.
+  *
+  * @param  \Illuminate\Http\Request  $request
+  * @param  int  $id
+  * @return \Illuminate\Http\Response
+  */
+  public function update(Request $request, $id)
+  {
+    //
+  }
 
-    /**
-     * Lists the speakers for the specified event.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+  /**
+  * Remove the specified resource from storage.
+  *
+  * @param  int  $id
+  * @return \Illuminate\Http\Response
+  */
+  public function destroy($id)
+  {
+    //
+  }
 
-    public function getAllSpeakers($id){
-        try {
-          $event = Event::findOrFail($id);
-          $speakers = User::whereHas('talks', function ($query) use ($event) {
-              $query->where('event_id',$event->id);
-          })->get();
-          return $speakers;
-        }catch(ModelNotFoundException $e) {
+  /**
+  * Lists the speakers for the specified event.
+  *
+  * @param  int  $id
+  * @return \Illuminate\Http\Response
+  */
 
+  public function getAllSpeakers($id){
+    $event = Event::findOrFail($id);
+    $speakers = User::whereHas('talks', function ($query) use ($event) {
+      $query->where('event_id',$event->id);
+    })->get();
+    return ["success"=>true,"data"=>$speakers];
+  }
+
+  /**
+  * Lists the speakers for the specified event.
+  *
+  * @param  int  event_id
+  * @param  int  payment_gateway_id (1 Efectivo, 2 Tarjeta, 3 Paypal)
+
+  * @return \Illuminate\Http\Response
+  */
+
+  public function signup(Request $request) {
+      $event_id = $request->input("event_id");
+      $event = Event::findOrFail($event_id);
+      $user = auth()->user();
+      if ($event->type->name === Event::paidTypeName) {
+        $payment_gateway_id = $request->input("payment_gateway_id");
+        if (!is_null($payment_gateway_id)) {
+          $order = \App\Order::create(["user_id"=>$user->id,"event_id"=>$event_id,"payment_gateway_id"=>$payment_gateway_id]);
+          return response()->json(["success"=>true,"data"=>['event'=>$event,'order'=>$order]]);
+        }else{
+          return response()->json(["success"=>false,"data"=>"Payment Gateway ID is required."]);
         }
-    }
+      }
+      $event->attendants()->attach($user);
+      return response()->json(["success"=>true,"data"=>$event]);
+  }
 }

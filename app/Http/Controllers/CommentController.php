@@ -15,7 +15,7 @@ class CommentController extends Controller
      */
     public function index()
     {
-        //
+        return ["success"=>true,"data"=>Comment::all()];
     }
 
     /**
@@ -31,14 +31,21 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  String  text
+     * @param  Integer  question_id
+
+     * @return App\Comment
      */
     public function store(StoreComment $request)
     {
       $validated = $request->validated();
       $comment = Comment::create($validated);
-      return $comment;
+      $user = auth()->user();
+      if (!is_null($user)) {
+        $comment->user_id = $user->id;
+        $comment->save();
+      }
+      return ["success"=>true,"data"=>$comment];
     }
 
     /**

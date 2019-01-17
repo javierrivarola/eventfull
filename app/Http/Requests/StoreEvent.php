@@ -13,7 +13,15 @@ class StoreEvent extends FormRequest
      */
     public function authorize()
     {
+      $user = auth()->user();
+      if (!$user) {
+          return false;
+      }
+      if ($user->hasRole('investigador') || $user->hasRole('profesional')) {
         return true;
+      }else{
+        return false;
+      }
     }
 
     /**

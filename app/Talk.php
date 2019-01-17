@@ -10,7 +10,7 @@ class Talk extends Model
     protected $fillable = ['name','event_id','user_id'];
 
     public function event(){
-      return $this->belongsToMany('App\Event');
+      return $this->belongsTo('App\Event');
     }
 
     public function questions(){

@@ -7,7 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model
 {
 
-    protected $fillable = ['name','event_type_id'];
+    protected $fillable = ['name','event_type_id','price'];
+
+    const freeEventTypeName = "GRATIS";
+    const preInscriptionTypeName = "PRE_INSCRIPCION";
+    const paidTypeName = "PAGO";
 
     public function talks(){
       return $this->hasMany('App\Talk');
@@ -26,6 +30,6 @@ class Event extends Model
     }
 
     public function addTalk($talk){
-      
+
     }
 }

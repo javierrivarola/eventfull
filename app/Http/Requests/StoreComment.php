@@ -25,8 +25,7 @@ class StoreComment extends FormRequest
     {
         return [
           'text' => 'required|max:255',
-          'user_id'=>'sometimes|exists:users,id',
-          'question_id'=>'required|exists:questions,id',
+          'question_id'=>'required|exists:questions,id,enable_comments,true',
         ];
     }
 }

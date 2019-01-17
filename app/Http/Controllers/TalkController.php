@@ -15,7 +15,7 @@ class TalkController extends Controller
      */
     public function index()
     {
-        return Talk::all();
+        return Talk::with('speaker','event.type','questions')->get();
     }
 
     /**
@@ -38,7 +38,7 @@ class TalkController extends Controller
     {
       $validated = $request->validated();
       $talk = Talk::create($validated);
-      return $talk;
+      return ["success"=>true,"data"=>$talk];
     }
 
     /**
@@ -85,4 +85,6 @@ class TalkController extends Controller
     {
         //
     }
+
+
 }

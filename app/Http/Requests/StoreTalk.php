@@ -13,7 +13,7 @@ class StoreTalk extends FormRequest
      */
     public function authorize()
     {
-        return true;
+      return true;
     }
 
     /**
@@ -25,8 +25,8 @@ class StoreTalk extends FormRequest
     {
         return [
           'name' => 'required|unique:talks|max:255',
-          'user_id'=>'sometimes|exists:users,id',
-          'event_id'=>'sometimes|exists:events,id'
+          'user_id'=>'required|exists:users,id',
+          'event_id'=>'required|exists:events,id'
         ];
     }
 }

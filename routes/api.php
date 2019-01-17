@@ -17,14 +17,27 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+//Events
 Route::resource('event','EventController');
 Route::get('event/{id}/speakers','EventController@getAllSpeakers');
 
-Route::resource('question','QuestionController');
-Route::resource('comment','CommentController');
 Route::resource('talk','TalkController');
+Route::resource('comment','CommentController');
+//Talks
+
+Route::group([
+
+    'middleware' => 'auth:api',
+
+], function ($router) {
+  Route::post('event/signup','EventController@signup');
+  Route::resource('question','QuestionController',['only'=>['destroy']]);
+
+});
 
 
+//Authentication
 Route::group([
 
     'middleware' => 'api',

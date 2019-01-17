@@ -17,7 +17,9 @@ class CreateQuestionsTable extends Migration
             $table->increments('id');
             $table->integer('upvotes')->default(0);
             $table->integer('downvotes')->default(0);
-            $table->string('text')->unique();
+            $table->integer('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('text');
             $table->integer('talk_id')->nullable();
             $table->foreign('talk_id')->references('id')->on('talks')->onDelete('cascade');
             $table->boolean('enable_comments')->default(true);

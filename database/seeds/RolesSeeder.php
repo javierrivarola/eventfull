@@ -21,12 +21,14 @@ class RolesSeeder extends Seeder
       $alumno = Role::create(['name' => 'alumno']);
       $investigador = Role::create(['name' => 'investigador']);
       $profesional = Role::create(['name' => 'profesional']);
+      $profesor = Role::create(['name' => 'profesor']);
 
       $createCommentPermission = Permission::create(['name' => 'create comment']);
       $persona->syncPermissions([$createCommentPermission]);
       $alumno->syncPermissions([$createCommentPermission]);
       $investigador->syncPermissions([$createCommentPermission]);
       $profesional->syncPermissions([$createCommentPermission]);
+      $profesor->syncPermissions([$createCommentPermission]);
     }
 
 }

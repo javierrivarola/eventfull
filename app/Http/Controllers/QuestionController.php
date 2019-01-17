@@ -17,7 +17,7 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        return Question::all();
+        return ["success"=>true,"data"=>Question::with('user','talk','comments')->get()];
     }
 
     /**
@@ -30,16 +30,25 @@ class QuestionController extends Controller
         //
     }
 
+
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  String  text
+     * @param  Integer  talk_id
+     * @param  Boolean  enable_comments
+
+     * @return App\Question
      */
     public function store(StoreQuestion $request)
     {
       $validated = $request->validated();
       $question = Question::create($validated);
+      $user = auth()->user();
+      if (!is_null($user)) {
+        $question->user_id = $user->id;
+        $question->save();
+      }
       return $question;
     }
 
@@ -49,7 +58,7 @@ class QuestionController extends Controller
      * @param  \App\Questions  $questions
      * @return \Illuminate\Http\Response
      */
-    public function show(Questions $questions)
+    public function show(Question $questions)
     {
         //
     }
@@ -60,7 +69,7 @@ class QuestionController extends Controller
      * @param  \App\Questions  $questions
      * @return \Illuminate\Http\Response
      */
-    public function edit(Questions $questions)
+    public function edit(Question $questions)
     {
         //
     }
@@ -72,7 +81,7 @@ class QuestionController extends Controller
      * @param  \App\Questions  $questions
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Questions $questions)
+    public function update(Request $request, Question $questions)
     {
         //
     }
@@ -83,9 +92,16 @@ class QuestionController extends Controller
      * @param  \App\Questions  $questions
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Questions $questions)
+    public function destroy($id)
     {
-        //
+        $question = Question::findOrFail($id);
+        $user = auth()->user();
+        if ($user->id === $question->talk->user_id) {
+          $question->delete();
+          return response()->json(["success"=>true,"data"=>"Question deleted successfully."]);
+        }else{
+          return response()->json(["success"=>false, "data","Only the creator of the Talk can delete questions."],403);
+        }
     }
 
     /**
@@ -94,15 +110,12 @@ class QuestionController extends Controller
      */
 
     public function voteUp($id){
-      try {
         DB::transaction(function () {
           $question = Question::findOrFail($id);
           $question->upvotes = $question->upvotes + 1;
           $question->save();
+          return ["success"=>true,"data"=>"Question voted up successfully."]
         });
-      }catch(ModelNotFoundException $e) {
-
-      }
     }
 
     /**
@@ -110,14 +123,11 @@ class QuestionController extends Controller
      * @param  integer  $id
      */
     public function voteDown($id){
-      try {
         DB::transaction(function () {
           $question = Question::findOrFail($id);
           $question->downvotes = $question->downvotes + 1;
           $question->save();
+          return ["success"=>true,"data"=>"Question voted down successfully."]
         });
-      }catch(ModelNotFoundException $e) {
-
-      }
     }
 }
